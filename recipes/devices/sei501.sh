@@ -36,9 +36,10 @@ PACKAGES=("iw" "wireless-regdb" "wpasupplicant" "alsa-utils")
 
 write_device_files() {
   log "Installing SEI501 boot files, modules and firmware" "ext"
-  cp -a "${PLTDIR}/${DEVICE}/boot/." "${ROOTFSMNT}/boot/"
-  cp -a "${PLTDIR}/${DEVICE}/lib/modules" "${ROOTFSMNT}/lib/"
-  cp -a "${PLTDIR}/${DEVICE}/lib/firmware" "${ROOTFSMNT}/lib/"
+  # FAT boot mounts do not support chown; preserve modes but not ownership.
+  cp -a --no-preserve=ownership "${PLTDIR}/${DEVICE}/boot/." "${ROOTFSMNT}/boot/"
+  cp -a --no-preserve=ownership "${PLTDIR}/${DEVICE}/lib/modules" "${ROOTFSMNT}/lib/"
+  cp -a --no-preserve=ownership "${PLTDIR}/${DEVICE}/lib/firmware" "${ROOTFSMNT}/lib/"
 }
 
 write_device_bootloader() {
