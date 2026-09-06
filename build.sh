@@ -596,15 +596,18 @@ if [[ -n "${DEVICE}" ]]; then
   source "${SRC}/scripts/makeimage.sh"
   end_img=$(date +%s)
   time_it "${end_img}" "${start_img}"
-  log "Image ${IMG_FILE} Created" "okay" "${TIME_STR}"
-  log "Compressing image"
-  start_zip=$(date +%s)
-  ZIP_FILE="${OUTPUT_DIR}/$(basename -s .img "${IMG_FILE}").zip"
-  zip -j "${ZIP_FILE}" "${IMG_FILE}"*
-  end_zip=$(date +%s)
-  time_it "${end_zip}" "${start_zip}"
-  log "Image ${ZIP_FILE} Created [ ${yellow}${standout}$(du -h "${ZIP_FILE}" | cut -f1)${normal} ]" "okay" "${TIME_STR}"
-  [[ ${CLEAN_IMAGE_FILE} == yes ]] && rm "${IMG_FILE}"*
+  if [[ "${CREATE_ZIP:-yes}" != "no" ]]; then
+    log "Compressing image"
+    start_zip=$(date +%s)
+    ZIP_FILE="${OUTPUT_DIR}/$(basename -s .img "${IMG_FILE}").zip"
+    zip -j "${ZIP_FILE}" "${IMG_FILE}"*
+    end_zip=$(date +%s)
+    time_it "${end_zip}" "${start_zip}"
+    log "Image ${ZIP_FILE} Created [ ${yellow}${standout}$(du -h "${ZIP_FILE}" | cut -f1)${normal} ]" "okay" "${TIME_STR}"
+    [[ ${CLEAN_IMAGE_FILE} == yes ]] && rm "${IMG_FILE}"*
+  else
+    log "Skipping image zip compression (CREATE_ZIP=no)" "info"
+  fi
 else
   log "No device specified, only base rootfs created!" "wrn"
 fi
