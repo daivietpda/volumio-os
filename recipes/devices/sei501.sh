@@ -40,6 +40,10 @@ write_device_files() {
   cp -a --no-preserve=ownership "${PLTDIR}/${DEVICE}/boot/." "${ROOTFSMNT}/boot/"
   cp -a --no-preserve=ownership "${PLTDIR}/${DEVICE}/lib/modules" "${ROOTFSMNT}/lib/"
   cp -a --no-preserve=ownership "${PLTDIR}/${DEVICE}/lib/firmware" "${ROOTFSMNT}/lib/"
+  # The platform archive may carry an older DTB; use the tracked, verified SEI501 DTB.
+  local dtb_source="${SRC}/../../board/sei501/boot/amlogic/meson-g12a-sei501.dtb"
+  [[ -f "${dtb_source}" ]] || { log "SEI501 DTB missing: ${dtb_source}" "err"; return 1; }
+  install -D -m 0644 "${dtb_source}" "${ROOTFSMNT}/boot/amlogic/meson-g12a-sei501.dtb"
 }
 
 write_device_bootloader() {
