@@ -468,7 +468,7 @@ if [[ -n "${DEVICE}" ]]; then
     [[ ! -f ${rootfs_tarball}.lz4 ]] && log "Couldn't find prior base system!" "err" && exit 1
     log "Using prior Base tarball" "$(date -r "${rootfs_tarball}.lz4" "+%m-%d-%Y %H:%M:%S")"
     mkdir -p "${BUILD_DIR}/root"
-    pv -p -b -r -c -N "[ .... ] ${rootfs_tarball}" "${rootfs_tarball}.lz4" |
+    pv -p -b -r -N "[ .... ] ${rootfs_tarball}" "${rootfs_tarball}.lz4" |
       lz4 -dc |
       tar xp --xattrs -C "${BUILD_DIR}/root"
   fi
