@@ -44,6 +44,10 @@ write_device_files() {
   local dtb_source="${SRC}/../../board/sei501/boot/amlogic/meson-g12a-sei501.dtb"
   [[ -f "${dtb_source}" ]] || { log "SEI501 DTB missing: ${dtb_source}" "err"; return 1; }
   install -D -m 0644 "${dtb_source}" "${ROOTFSMNT}/boot/amlogic/meson-g12a-sei501.dtb"
+  # Install the tracked aml_autoscript with persistent autoboot configuration.
+  local aml_autoscript_src="${SRC}/../../board/sei501/boot/aml_autoscript"
+  [[ -f "${aml_autoscript_src}" ]] || { log "SEI501 aml_autoscript missing: ${aml_autoscript_src}" "err"; return 1; }
+  install -D -m 0644 "${aml_autoscript_src}" "${ROOTFSMNT}/boot/aml_autoscript"
 }
 
 write_device_bootloader() {
