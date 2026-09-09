@@ -66,6 +66,10 @@ mount_chroot() {
 
 unmount_chroot() {
   local base=$1
+  if [[ -z "${base}" || "${base}" == "/" ]]; then
+    log "Refusing to unmount empty or root base: '${base}'" "err"
+    return 0
+  fi
   log "Unmounting chroot temporary devices at ${base}"
   umount -l "${base}/dev" || log "umount dev failed" "wrn"
   umount -l "${base}/proc" || log "umount proc failed" "wrn"

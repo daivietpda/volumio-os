@@ -48,6 +48,18 @@ write_device_files() {
   local aml_autoscript_src="${SRC}/../../board/sei501/boot/aml_autoscript"
   [[ -f "${aml_autoscript_src}" ]] || { log "SEI501 aml_autoscript missing: ${aml_autoscript_src}" "err"; return 1; }
   install -D -m 0644 "${aml_autoscript_src}" "${ROOTFSMNT}/boot/aml_autoscript"
+  # Install install-to-emmc.sh automation script
+  local install_emmc_src="${SRC}/../../board/sei501/boot-scripts/install-to-emmc.sh"
+  if [[ -f "${install_emmc_src}" ]]; then
+    install -D -m 0755 "${install_emmc_src}" "${ROOTFSMNT}/boot/install-to-emmc.sh"
+  fi
+  # Install DDR.USB if present
+  local ddr_src="${SRC}/../../board/sei501/boot/DDR.USB"
+  if [[ -f "${ddr_src}" ]]; then
+    install -D -m 0644 "${ddr_src}" "${ROOTFSMNT}/boot/DDR.USB"
+  fi
+  # Enable ssh by default
+  touch "${ROOTFSMNT}/boot/ssh"
 }
 
 write_device_bootloader() {
